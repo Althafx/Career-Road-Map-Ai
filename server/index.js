@@ -4,6 +4,7 @@ const cors = require("cors");
 dotenv.config();
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/auth")
+const assessmentRoutes = require('./routes/assessment');
 connectDB();
 const app = express();
 
@@ -11,6 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/auth',authRoutes)
+app.use('/api/assessment', assessmentRoutes);
 
 app.get('/api/test', (req,res)=>{
     res.json({message: "backend is working"})

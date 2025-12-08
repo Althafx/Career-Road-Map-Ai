@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import Assessment from './pages/Assessment';
 
 function App() {
  
@@ -15,9 +16,18 @@ function App() {
         <Route path="/" element={<Home/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
-        <Route path="/dashboard" element={<ProtectedRoute>
-      <Dashboard />
-    </ProtectedRoute>}/>
+        <Route path="/dashboard"
+         element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>}/>
+        <Route path="/assessment" 
+          element={
+                <ProtectedRoute>
+                  <Assessment />
+                </ProtectedRoute>
+          } 
+        />
       </Routes>
     </Router>
     

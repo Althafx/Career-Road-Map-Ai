@@ -1,20 +1,22 @@
-import {create} from 'zustand'
+import { create } from 'zustand'
 
-const useAuthStore = create((set)=>({
-    user: null,
+const useAuthStore = create((set) => ({
+    user: JSON.parse(localStorage.getItem('user')) || null,
     token: localStorage.getItem('token') || null,
 
-    setAuth:(user,token)=>{
-        localStorage.setItem('token',token)
-        set({user,token})
+    setAuth: (user, token) => {
+        localStorage.setItem('token', token)
+        localStorage.setItem('user', JSON.stringify(user))
+        set({ user, token })
     },
 
-    logout:()=>{
+    logout: () => {
         localStorage.removeItem('token')
-        set({user:null,token:null})
+        localStorage.removeItem('user')
+        set({ user: null, token: null })
     }
 
-    
+
 }))
 
 export default useAuthStore
