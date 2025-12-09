@@ -5,6 +5,7 @@ dotenv.config();
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/auth")
 const assessmentRoutes = require('./routes/assessment');
+const roadmapRoutes = require('./routes/roadmap')
 connectDB();
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 
 app.use('/api/auth',authRoutes)
 app.use('/api/assessment', assessmentRoutes);
+app.use('/api/roadmap', roadmapRoutes);
 
 app.get('/api/test', (req,res)=>{
     res.json({message: "backend is working"})
