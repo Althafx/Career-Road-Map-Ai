@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "worker": "nodemon startWorker.js"
   },
   "keywords": [],
   "author": "",
@@ -14,12 +15,16 @@
   "type": "commonjs",
   "dependencies": {
     "bcryptjs": "^3.0.3",
+    "bullmq": "^5.66.0",
+    "chromadb": "^3.1.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "groq-sdk": "^0.37.0",
+    "ioredis": "^5.8.2",
     "jsonwebtoken": "^9.0.3",
-    "mongoose": "^9.0.0"
+    "mongoose": "^9.0.0",
+    "openai": "^6.10.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.11"

@@ -1,72 +1,88 @@
+const { roadmapQueue } = require('../config/queue');
 const Roadmap = require('../models/Roadmap');
-const Assessment = require('../models/Assessment');
-const { generateCareerAdvice, generateRoadmap } = require('../services/aiService');
-
+const User = require('../models/User');
 
 exports.generateUserRoadmap = async (req, res) => {
-    let roadmap; // Declare outside try block
+    let roadmap;
     try {
-        const assessment = await Assessment.findOne({ user: req.user.id })
+        const { assessmentId } = req.body;
+
+        if (!assessmentId) {
+            return res.status(400).json({ message: 'Assessment ID required' });
+        }
+
+        const user = await User.findById(req.user.id);
+        const assessment = user.assessments.id(assessmentId);
+
         if (!assessment) {
-            return res.status(404).json({ message: "please complete the career assessment first" })
+            return res.status(404).json({ message: 'Assessment not found' });
         }
 
-        roadmap = await Roadmap.findOne({ user: req.user.id })
-        if (roadmap && roadmap.status === "completed") {
-            return res.status(200).json({ success: true, roadmap, message: "roadmap already exists" })
+        roadmap = await Roadmap.findOne({
+            user: req.user.id,
+            assessmentId: assessmentId
+        });
+
+        if (roadmap?.status === 'completed') {
+            return res.json({ success: true, roadmap, message: 'Already exists' });
+        }
+        if (roadmap?.status === 'generating') {
+            return res.json({ success: true, roadmap, message: 'In progress' });
         }
 
-        // Create new roadmap with 'generating' status
         if (!roadmap) {
             roadmap = await Roadmap.create({
                 user: req.user.id,
-                assessment: assessment._id,
+                assessmentId: assessmentId,
                 careerAdvice: '',
                 roadmapContent: '',
                 status: 'generating'
             });
+        } else {
+            roadmap.status = 'generating';
+            await roadmap.save();
         }
 
-        //Generate AI content
+        console.log('--- Debugging Roadmap Controller ---');
+        console.log('Assessment ID:', assessmentId);
+        console.log('Assessment Object found:', !!assessment);
+        if (assessment) {
+            console.log('Assessment Data (toObject):', JSON.stringify(assessment.toObject(), null, 2));
+        }
 
-        const careerAdvice = await generateCareerAdvice(assessment);
-        const roadmapContent = await generateRoadmap(assessment);
-
-
-        //Update roadmap
-        roadmap.careerAdvice = careerAdvice;
-        roadmap.roadmapContent = roadmapContent;
-        roadmap.status = "completed";
-        roadmap.updatedAt = Date.now();
-        await roadmap.save();
-
-
-        res.status(201).json({
-            success: true,
-            roadmap
+        const job = await roadmapQueue.add('generate-roadmap', {
+            userId: req.user.id,
+            assessmentId: assessmentId,
+            assessmentData: assessment.toObject()
         });
 
+        res.status(202).json({
+            success: true,
+            message: 'Generation started',
+            jobId: job.id,
+            roadmap
+        });
     } catch (error) {
-        console.error('Roadmap generation error:', error);
-
-        // Update status to failed if roadmap exists
         if (roadmap) {
             roadmap.status = 'failed';
             await roadmap.save();
         }
-
-        res.status(500).json({
-            message: 'Failed to generate roadmap',
-            error: error.message
-        });
+        res.status(500).json({ message: 'Failed to start', error: error.message });
     }
 };
 
-// Get user's roadmap
 exports.getUserRoadmap = async (req, res) => {
     try {
-        const roadmap = await Roadmap.findOne({ user: req.user.id })
-            .populate('assessment');
+        const { assessmentId } = req.query;
+
+        if (!assessmentId) {
+            return res.status(400).json({ message: 'Assessment ID required' });
+        }
+
+        const roadmap = await Roadmap.findOne({
+            user: req.user.id,
+            assessmentId: assessmentId
+        });
 
         if (!roadmap) {
             return res.status(404).json({
@@ -78,14 +94,39 @@ exports.getUserRoadmap = async (req, res) => {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
-// Regenerate roadmap
+
 exports.regenerateRoadmap = async (req, res) => {
     try {
-        // Delete existing roadmap
-        await Roadmap.findOneAndDelete({ user: req.user.id });
+        const { assessmentId } = req.body;
 
-        // Generate new one
+        if (!assessmentId) {
+            return res.status(400).json({ message: 'Assessment ID required' });
+        }
+
+        await Roadmap.findOneAndDelete({
+            user: req.user.id,
+            assessmentId: assessmentId
+        });
+
         return exports.generateUserRoadmap(req, res);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+exports.getJobStatus = async (req, res) => {
+    try {
+        const { jobId } = req.params;
+        const job = await roadmapQueue.getJob(jobId);
+
+        if (!job) {
+            return res.status(404).json({ message: 'Job not found' });
+        }
+
+        const state = await job.getState();
+        const progress = job.progress || 0;
+
+        res.json({ success: true, jobId: job.id, state, progress });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
     }

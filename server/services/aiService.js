@@ -5,15 +5,23 @@ const groq = new Groq({
 // Generate career advice based on assessment
 exports.generateCareerAdvice = async (assessmentData) => {
     try {
+        if (!assessmentData) {
+            throw new Error('assessmentData is null or undefined');
+        }
+        console.log('AI Service received data:', JSON.stringify(assessmentData, null, 2));
+
+        const skills = Array.isArray(assessmentData.skills) ? assessmentData.skills.join(', ') : assessmentData.skills || '';
+        const interests = Array.isArray(assessmentData.interests) ? assessmentData.interests.join(', ') : assessmentData.interests || '';
+
         const prompt = `You are a career advisor AI. Based on the following user information, provide personalized career advice:
-Current Role: ${assessmentData.currentRole}
-Years of Experience: ${assessmentData.yearsOfExperience}
-Target Role: ${assessmentData.targetRole}
-Current Skills: ${assessmentData.skills.join(', ')}
-Interests: ${assessmentData.interests.join(', ')}
-Education: ${assessmentData.educationLevel}
-Learning Style: ${assessmentData.preferredLearningStyle}
-Time Commitment: ${assessmentData.timeCommitment}
+Current Role: ${assessmentData.currentRole || 'Not specified'}
+Years of Experience: ${assessmentData.yearsOfExperience || 0}
+Target Role: ${assessmentData.targetRole || 'Not specified'}
+Current Skills: ${skills}
+Interests: ${interests}
+Education: ${assessmentData.educationLevel || 'Not specified'}
+Learning Style: ${assessmentData.preferredLearningStyle || 'Not specified'}
+Time Commitment: ${assessmentData.timeCommitment || 'Not specified'}
 Provide:
 1. A brief career gap analysis (what skills are missing)
 2. Top 3 recommended skills to learn
@@ -40,12 +48,14 @@ Keep the response concise and actionable.`;
 // Generate learning roadmap
 exports.generateRoadmap = async (assessmentData) => {
     try {
-        const prompt = `Create a detailed learning roadmap for someone transitioning from ${assessmentData.currentRole} to ${assessmentData.targetRole}.
+        const skills = Array.isArray(assessmentData.skills) ? assessmentData.skills.join(', ') : assessmentData.skills || '';
 
-Current Skills: ${assessmentData.skills.join(', ')}
-Target Skills Needed: Based on ${assessmentData.targetRole}
-Available Time: ${assessmentData.timeCommitment} (IMPORTANT: Use ONLY this amount, do not exceed it)
-Learning Style: ${assessmentData.preferredLearningStyle}
+        const prompt = `Create a detailed learning roadmap for someone transitioning from ${assessmentData.currentRole || 'Unknown role'} to ${assessmentData.targetRole || 'Unknown role'}.
+
+Current Skills: ${skills}
+Target Skills Needed: Based on ${assessmentData.targetRole || 'Unknown role'}
+Available Time: ${assessmentData.timeCommitment || '10 hours/week'} (IMPORTANT: Use ONLY this amount, do not exceed it)
+Learning Style: ${assessmentData.preferredLearningStyle || 'Visual'}
 
 CRITICAL: The user can dedicate ${assessmentData.timeCommitment}. Calculate daily hours by dividing weekly hours by 7. For example, if they have 14 hours/week, that's 2 hours/day. NEVER suggest more time than they have available.
 

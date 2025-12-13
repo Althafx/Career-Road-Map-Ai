@@ -5,9 +5,8 @@ const roadmapSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    assessment: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Assessment',
+    assessmentId: {
+        type: String,
         required: true
     },
     careerAdvice: {

@@ -2,12 +2,12 @@ const express = require('express');
 const {
   createAssessment,
   getAssessment,
-  updateAssessment
+  deleteAssessment
 } = require('../controllers/assessmentController');
 const auth = require('../middleware/auth');
 const router = express.Router();
 router.post('/', auth, createAssessment);
 router.get('/', auth, getAssessment);
-router.put('/', auth, updateAssessment);
+router.delete('/:id', auth, deleteAssessment);
 
 module.exports = router;
