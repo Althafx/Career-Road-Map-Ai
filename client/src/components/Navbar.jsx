@@ -11,32 +11,37 @@ function Navbar() {
   };
 
   return (
-    <nav>
+    <nav className="fixed top-0 w-full z-50 bg-slate-900/80 backdrop-blur-md border-b border-white/10 px-8 py-6 flex items-center justify-between">
       {/* Brand Logo */}
-      <Link to="/" style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--accent-cyan)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-        <span style={{ fontSize: '1.8rem' }} className="text-gradient">TRAJECTORY</span > 
+      <Link to="/" className="text-2xl font-bold text-accent-cyan flex items-center gap-2">
+        <span className="text-3xl">⚡</span>
+        <span className="text-gradient">TRAJECTORY</span>
       </Link>
 
       {/* Navigation Links */}
-      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '2rem' }}>
+      <div className="ml-auto flex items-center gap-8">
         {!token ? (
           <>
-            <Link to="/login">Login</Link>
+            <Link to="/login" className="text-slate-300 font-medium text-lg hover:text-accent-cyan transition-colors">
+              Login
+            </Link>
             <Link to="/register">
-              <button className="btn-primary" style={{ padding: '0.5rem 1.5rem', fontSize: '0.9rem' }}>
+              <button className="btn-primary !px-6 !py-2 !text-sm">
                 Join Now
               </button>
             </Link>
           </>
         ) : (
           <>
-            <span style={{ color: 'var(--text-secondary)' }}>
-              Future Of ‎ <span style={{ color: 'var(--accent-cyan)' }}>{user?.name}</span>
+            <span className="text-slate-400 font-medium">
+              Future Of ‎ <span className="text-accent-cyan">{user?.name}</span>
             </span>
-            <Link to="/dashboard">Dashboard</Link>
+            <Link to="/dashboard" className="text-slate-300 font-medium text-lg hover:text-accent-cyan transition-colors">
+              Dashboard
+            </Link>
             <button
               onClick={handleLogout}
-              className="btn-danger"
+              className="btn-logout"
             >
               Logout
             </button>

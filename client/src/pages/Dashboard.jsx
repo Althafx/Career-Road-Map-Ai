@@ -36,7 +36,7 @@ function Dashboard() {
 
   if (loading) {
     return (
-      <div className="page-container" style={{ display: 'flex', justifyContent: 'center' }}>
+      <div className="page-container flex justify-center">
         <div className="spinner"></div>
       </div>
     );
@@ -45,49 +45,52 @@ function Dashboard() {
   return (
     <div className="page-container">
       <div className="dashboard-container">
-        <div className="dashboard-header">
-          <h1 className="text-gradient">Your Command Center</h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '1.2rem' }}>
+        <div className="text-center mb-16">
+          <h1 className="text-gradient text-6xl mb-4">Your Command Center</h1>
+          <p className="text-slate-400 text-xl">
             Manage your career paths and track your progress.
           </p>
         </div>
 
         <div className="dashboard-section">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-            <h2>Active Assessments</h2>
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl">Active Assessments</h2>
             <Link to="/assessment">
-              <button className="btn-primary" style={{ padding: '0.8rem 1.5rem', fontSize: '0.9rem' }}>
+              <button className="btn-primary !px-6 !py-3 !text-sm">
                 + New Assessment
               </button>
             </Link>
           </div>
 
           {assessments.length === 0 ? (
-            <div className="glass-panel" style={{ padding: '3rem', textAlign: 'center' }}>
-              <div style={{ fontSize: '4rem', marginBottom: '1rem', opacity: 0.5 }}>🚀</div>
-              <h3 style={{ marginBottom: '1rem' }}>No Career Paths Found</h3>
-              <p style={{ marginBottom: '2rem' }}>Start your journey by creating a new AI assessment.</p>
+            <div className="glass-panel p-12 text-center">
+              <div className="text-6xl mb-4 opacity-50">🚀</div>
+              <h3 className="text-2xl mb-4">No Career Paths Found</h3>
+              <p className="mb-8 text-slate-300">Start your journey by creating a new AI assessment.</p>
               <Link to="/assessment">
                 <button className="btn-primary">Initialize Career Path</button>
               </Link>
             </div>
           ) : (
-            <div className="assessment-cards">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {assessments.map((assessment) => (
-                <div key={assessment._id} className="assessment-card glass-panel" style={{ position: 'relative' }}>
-                  <h3>{assessment.targetRole || 'Untitled Path'}</h3>
+                <div key={assessment._id} className="assessment-card glass-panel relative flex flex-col justify-between h-full">
+                  {/* Note: assessment-card class handles basic styling */}
+                  <div>
+                    <h3 className="text-accent-cyan text-2xl mb-6">{assessment.targetRole || 'Untitled Path'}</h3>
 
-                  <div style={{ marginBottom: '1.5rem' }}>
-                    <p><strong>Current:</strong> {assessment.currentRole}</p>
-                    <p><strong>Experience:</strong> {assessment.yearsOfExperience} years</p>
-                    <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
-                      Created: {new Date(assessment.createdAt).toLocaleDateString()}
-                    </p>
+                    <div className="mb-6 space-y-2">
+                      <p><strong className="text-slate-300">Current:</strong> {assessment.currentRole}</p>
+                      <p><strong className="text-slate-300">Experience:</strong> {assessment.yearsOfExperience} years</p>
+                      <p className="text-sm text-slate-400 mt-2">
+                        Created: {new Date(assessment.createdAt).toLocaleDateString()}
+                      </p>
+                    </div>
                   </div>
 
-                  <div className="card-actions">
-                    <Link to={`/roadmap?assessmentId=${assessment._id}`} style={{ flex: 1 }}>
-                      <button className="btn-primary" style={{ width: '100%' }}>View Map</button>
+                  <div className="flex gap-4">
+                    <Link to={`/roadmap?assessmentId=${assessment._id}`} className="flex-1">
+                      <button className="btn-primary w-full">View Map</button>
                     </Link>
                     <button
                       className="btn-danger"

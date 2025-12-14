@@ -45,16 +45,16 @@ function Register() {
 
   return (
     <div className="auth-container">
-      <div className="auth-card glass-panel" style={{ animation: 'fade-in-up 0.5s ease-out' }}>
-        <h2 style={{ textAlign: 'center', marginBottom: '2rem', fontSize: '2rem' }}>
+      <div className="auth-card glass-panel animate-[fade-in-up_0.5s_ease-out] !mt-0">
+        <h2 className="text-center mb-8 text-3xl">
           Initialize <span className="text-gradient">Profile</span>
         </h2>
 
-        {error && <div className="error" style={{ textAlign: 'center' }}>{error}</div>}
+        {error && <div className="text-red-500 text-center mb-4 bg-red-500/10 p-2 rounded border border-red-500/50">{error}</div>}
 
         <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: '1rem' }}>
-            <label style={{ color: 'var(--accent-cyan)' }}>Full Name</label>
+          <div className="mb-4">
+            <label className="text-accent-cyan uppercase tracking-wider font-semibold ml-2 text-xs block mb-2">Full Name</label>
             <input
               type="text"
               name="name"
@@ -62,11 +62,12 @@ function Register() {
               value={formData.name}
               onChange={handleChange}
               required
+              className="w-full bg-slate-900/60 border border-white/10 text-white p-4 rounded-xl focus:bg-slate-900/80 focus:border-accent-cyan focus:shadow-[0_0_15px_rgba(0,243,255,0.15)] outline-none transition-all"
             />
           </div>
 
-          <div style={{ marginBottom: '1rem' }}>
-            <label style={{ color: 'var(--accent-cyan)' }}>Email Address</label>
+          <div className="mb-4">
+            <label className="text-accent-cyan uppercase tracking-wider font-semibold ml-2 text-xs block mb-2">Email Address</label>
             <input
               type="email"
               name="email"
@@ -74,11 +75,12 @@ function Register() {
               value={formData.email}
               onChange={handleChange}
               required
+              className="w-full bg-slate-900/60 border border-white/10 text-white p-4 rounded-xl focus:bg-slate-900/80 focus:border-accent-cyan focus:shadow-[0_0_15px_rgba(0,243,255,0.15)] outline-none transition-all"
             />
           </div>
 
-          <div style={{ marginBottom: '1rem' }}>
-            <label style={{ color: 'var(--accent-cyan)' }}>Password</label>
+          <div className="mb-4">
+            <label className="text-accent-cyan uppercase tracking-wider font-semibold ml-2 text-xs block mb-2">Password</label>
             <input
               type="password"
               name="password"
@@ -86,11 +88,12 @@ function Register() {
               value={formData.password}
               onChange={handleChange}
               required
+              className="w-full bg-slate-900/60 border border-white/10 text-white p-4 rounded-xl focus:bg-slate-900/80 focus:border-accent-cyan focus:shadow-[0_0_15px_rgba(0,243,255,0.15)] outline-none transition-all"
             />
           </div>
 
-          <div style={{ marginBottom: '2rem' }}>
-            <label style={{ color: 'var(--accent-cyan)' }}>Confirm Password</label>
+          <div className="mb-8">
+            <label className="text-accent-cyan uppercase tracking-wider font-semibold ml-2 text-xs block mb-2">Confirm Password</label>
             <input
               type="password"
               name="confirmPassword"
@@ -98,21 +101,21 @@ function Register() {
               value={formData.confirmPassword}
               onChange={handleChange}
               required
+              className="w-full bg-slate-900/60 border border-white/10 text-white p-4 rounded-xl focus:bg-slate-900/80 focus:border-accent-cyan focus:shadow-[0_0_15px_rgba(0,243,255,0.15)] outline-none transition-all"
             />
           </div>
 
           <button
             type="submit"
-            className="btn-primary"
-            style={{ width: '100%', padding: '1rem', marginBottom: '1rem' }}
+            className="btn-primary w-full p-4 mb-4 flex justify-center"
             disabled={loading}
           >
             {loading ? 'Creating Account...' : 'Create Account'}
           </button>
         </form>
 
-        <p style={{ textAlign: 'center', marginTop: '1rem', color: 'var(--text-secondary)' }}>
-          Already have an account? <Link to="/login" style={{ color: 'var(--accent-purple)', fontWeight: 'bold' }}>Login System</Link>
+        <p className="text-center mt-4 text-slate-400">
+          Already have an account? <Link to="/login" className="text-accent-purple font-bold hover:text-accent-cyan transition-colors">Login System</Link>
         </p>
       </div>
     </div>

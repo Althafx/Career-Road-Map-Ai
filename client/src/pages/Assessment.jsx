@@ -48,26 +48,26 @@ function Assessment() {
     const progress = (step / 3) * 100;
 
     return (
-        <div className="page-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <div className="glass-panel" style={{ width: '100%', maxSelf: 'center', maxWidth: '800px', padding: '3rem', margin: '2rem' }}>
-                <h1 className="text-gradient" style={{ textAlign: 'center', marginBottom: '1rem' }}>Initiate Career Analysis</h1>
+        <div className="page-container flex justify-center items-center">
+            <div className="glass-panel w-full max-w-4xl p-12 m-8">
+                <h1 className="text-gradient text-center mb-4 text-4xl">Initiate Career Analysis</h1>
 
                 {/* Progress Bar */}
-                <div className="progress-container" style={{ margin: '1.5rem 0 3rem' }}>
-                    <div className="progress-bar" style={{ width: `${progress}%` }}>
+                <div className="progress-container mb-12">
+                    <div className="progress-bar flex items-center justify-center text-xs font-bold text-black" style={{ width: `${progress}%` }}>
                         Step {step} of 3
                     </div>
                 </div>
 
-                <form onSubmit={handleSubmit} style={{ animation: 'fade-in-up 0.4s ease-out' }}>
+                <form onSubmit={handleSubmit} className="animate-[fade-in-up_0.4s_ease-out]">
                     {step === 1 && (
                         <div key="step1">
-                            <h2 style={{ marginBottom: '1.5rem', color: 'var(--accent-purple)' }}>Current Status</h2>
+                            <h2 className="mb-6 text-accent-purple text-2xl">Current Status</h2>
 
-                            <div style={{ marginBottom: '1.5rem' }}>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--accent-cyan)' }}>Current Role</label>
+                            <div className="mb-6">
+                                <label className="block mb-2 text-accent-cyan font-semibold">Current Role</label>
                                 <input
-                                    style={{ width: '100%', padding: '1rem', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', borderRadius: '8px', color: 'white' }}
+                                    className="w-full p-4 bg-black/20 border border-white/10 rounded-lg text-white focus:outline-none focus:border-accent-cyan focus:shadow-[0_0_10px_rgba(0,243,255,0.3)] transition-all"
                                     type="text"
                                     name="currentRole"
                                     placeholder="e.g. Junior Developer"
@@ -77,10 +77,10 @@ function Assessment() {
                                 />
                             </div>
 
-                            <div style={{ marginBottom: '1.5rem' }}>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--accent-cyan)' }}>Years of Experience</label>
+                            <div className="mb-6">
+                                <label className="block mb-2 text-accent-cyan font-semibold">Years of Experience</label>
                                 <input
-                                    style={{ width: '100%', padding: '1rem', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', borderRadius: '8px', color: 'white' }}
+                                    className="w-full p-4 bg-black/20 border border-white/10 rounded-lg text-white focus:outline-none focus:border-accent-cyan focus:shadow-[0_0_10px_rgba(0,243,255,0.3)] transition-all"
                                     type="number"
                                     name="yearsOfExperience"
                                     placeholder="0"
@@ -90,10 +90,10 @@ function Assessment() {
                                 />
                             </div>
 
-                            <div style={{ marginBottom: '2rem' }}>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--accent-cyan)' }}>Education Level</label>
+                            <div className="mb-8">
+                                <label className="block mb-2 text-accent-cyan font-semibold">Education Level</label>
                                 <input
-                                    style={{ width: '100%', padding: '1rem', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', borderRadius: '8px', color: 'white' }}
+                                    className="w-full p-4 bg-black/20 border border-white/10 rounded-lg text-white focus:outline-none focus:border-accent-cyan focus:shadow-[0_0_10px_rgba(0,243,255,0.3)] transition-all"
                                     type="text"
                                     name="educationLevel"
                                     placeholder="e.g. Bachelor's Degree"
@@ -103,20 +103,20 @@ function Assessment() {
                                 />
                             </div>
 
-                            <div style={{ textAlign: 'right' }}>
+                            <div className="text-right">
                                 <button type="button" className="btn-primary" onClick={nextStep}>Next Phase &rarr;</button>
                             </div>
                         </div>
                     )}
 
                     {step === 2 && (
-                        <div key="step2" style={{ animation: 'fade-in-up 0.4s ease-out' }}>
-                            <h2 style={{ marginBottom: '1.5rem', color: 'var(--accent-purple)' }}>Target Parameters</h2>
+                        <div key="step2" className="animate-[fade-in-up_0.4s_ease-out]">
+                            <h2 className="mb-6 text-accent-purple text-2xl">Target Parameters</h2>
 
-                            <div style={{ marginBottom: '1.5rem' }}>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--accent-cyan)' }}>Target Role</label>
+                            <div className="mb-6">
+                                <label className="block mb-2 text-accent-cyan font-semibold">Target Role</label>
                                 <input
-                                    style={{ width: '100%', padding: '1rem', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', borderRadius: '8px', color: 'white' }}
+                                    className="w-full p-4 bg-black/20 border border-white/10 rounded-lg text-white focus:outline-none focus:border-accent-cyan focus:shadow-[0_0_10px_rgba(0,243,255,0.3)] transition-all"
                                     type="text"
                                     name="targetRole"
                                     placeholder="e.g. Senior Full Stack Engineer"
@@ -126,10 +126,10 @@ function Assessment() {
                                 />
                             </div>
 
-                            <div style={{ marginBottom: '1.5rem' }}>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--accent-cyan)' }}>Current Skills (Comma Separated)</label>
+                            <div className="mb-6">
+                                <label className="block mb-2 text-accent-cyan font-semibold">Current Skills (Comma Separated)</label>
                                 <input
-                                    style={{ width: '100%', padding: '1rem', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', borderRadius: '8px', color: 'white' }}
+                                    className="w-full p-4 bg-black/20 border border-white/10 rounded-lg text-white focus:outline-none focus:border-accent-cyan focus:shadow-[0_0_10px_rgba(0,243,255,0.3)] transition-all"
                                     type="text"
                                     placeholder="JavaScript, React, Node.js"
                                     value={skillsInput}
@@ -138,10 +138,10 @@ function Assessment() {
                                 />
                             </div>
 
-                            <div style={{ marginBottom: '2rem' }}>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--accent-cyan)' }}>Interests / Passions (Comma Separated)</label>
+                            <div className="mb-8">
+                                <label className="block mb-2 text-accent-cyan font-semibold">Interests / Passions (Comma Separated)</label>
                                 <input
-                                    style={{ width: '100%', padding: '1rem', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', borderRadius: '8px', color: 'white' }}
+                                    className="w-full p-4 bg-black/20 border border-white/10 rounded-lg text-white focus:outline-none focus:border-accent-cyan focus:shadow-[0_0_10px_rgba(0,243,255,0.3)] transition-all"
                                     type="text"
                                     placeholder="AI, Blockchain, UI Design"
                                     value={interestsInput}
@@ -150,21 +150,21 @@ function Assessment() {
                                 />
                             </div>
 
-                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <button type="button" className="btn-primary" style={{ background: 'transparent', border: '1px solid var(--accent-blue)' }} onClick={prevStep}>&larr; Back</button>
+                            <div className="flex justify-between">
+                                <button type="button" className="btn-primary !bg-transparent !border !border-accent-blue hover:!bg-accent-blue/10" onClick={prevStep}>&larr; Back</button>
                                 <button type="button" className="btn-primary" onClick={nextStep}>Next Phase &rarr;</button>
                             </div>
                         </div>
                     )}
 
                     {step === 3 && (
-                        <div key="step3" style={{ animation: 'fade-in-up 0.4s ease-out' }}>
-                            <h2 style={{ marginBottom: '1.5rem', color: 'var(--accent-purple)' }}>Learning Profile</h2>
+                        <div key="step3" className="animate-[fade-in-up_0.4s_ease-out]">
+                            <h2 className="mb-6 text-accent-purple text-2xl">Learning Profile</h2>
 
-                            <div style={{ marginBottom: '1.5rem' }}>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--accent-cyan)' }}>Preferred Learning Style</label>
+                            <div className="mb-6">
+                                <label className="block mb-2 text-accent-cyan font-semibold">Preferred Learning Style</label>
                                 <select
-                                    style={{ width: '100%', padding: '1rem', background: 'rgba(0,0,0,0.5)', border: '1px solid var(--glass-border)', borderRadius: '8px', color: 'white', cursor: 'pointer' }}
+                                    className="w-full p-4 bg-black/50 border border-white/10 rounded-lg text-white cursor-pointer focus:outline-none focus:border-accent-cyan focus:shadow-[0_0_10px_rgba(0,243,255,0.3)] transition-all"
                                     name="preferredLearningStyle"
                                     value={formData.preferredLearningStyle}
                                     onChange={handleChange}
@@ -178,10 +178,10 @@ function Assessment() {
                                 </select>
                             </div>
 
-                            <div style={{ marginBottom: '2rem' }}>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--accent-cyan)' }}>Time Commitment</label>
+                            <div className="mb-8">
+                                <label className="block mb-2 text-accent-cyan font-semibold">Time Commitment</label>
                                 <input
-                                    style={{ width: '100%', padding: '1rem', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', borderRadius: '8px', color: 'white' }}
+                                    className="w-full p-4 bg-black/20 border border-white/10 rounded-lg text-white focus:outline-none focus:border-accent-cyan focus:shadow-[0_0_10px_rgba(0,243,255,0.3)] transition-all"
                                     type="text"
                                     name="timeCommitment"
                                     placeholder="e.g. 10 hours per week"
@@ -191,9 +191,9 @@ function Assessment() {
                                 />
                             </div>
 
-                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <button type="button" className="btn-primary" style={{ background: 'transparent', border: '1px solid var(--accent-blue)' }} onClick={prevStep}>&larr; Back</button>
-                                <button type="submit" className="btn-primary" style={{ background: 'linear-gradient(45deg, var(--accent-cyan), var(--accent-purple))', boxShadow: '0 0 15px rgba(0, 243, 255, 0.5)' }}>Submit Assessment</button>
+                            <div className="flex justify-between">
+                                <button type="button" className="btn-primary !bg-transparent !border !border-accent-blue hover:!bg-accent-blue/10" onClick={prevStep}>&larr; Back</button>
+                                <button type="submit" className="btn-primary">Submit Assessment</button>
                             </div>
                         </div>
                     )}

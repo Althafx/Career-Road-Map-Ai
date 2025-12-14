@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 function Home() {
   return (
-    <div className="page-container" style={{ paddingTop: 0, position: 'relative', overflow: 'hidden' }}>
+    <div className="page-container !pt-0 relative overflow-hidden">
       {/* Water Droplet Ripple Background */}
       <div className="ripple-container">
         <div className="ripple"></div>
@@ -10,125 +10,59 @@ function Home() {
         <div className="ripple"></div>
       </div>
 
-      <div style={{
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        textAlign: 'center',
-        padding: '2rem',
-        paddingTop: '19vh', /* Moved up from middle */
-        position: 'relative'
-      }}>
-      
+      <div className="min-h-screen flex flex-col items-center text-center p-8 pt-[19vh] relative">
 
-        
-        <h1 style={{
-          fontSize: '4rem',
-          marginBottom: '2rem',
-          animation: 'fade-in-up 1s ease-out',
-          zIndex: 1
-        }}>
+        <h1 className="text-6xl mb-8 animate-[fade-in-up_1s_ease-out] z-10 relative">
           <span className="text-gradient"> TRAJECTORY </span>
         </h1>
 
-         <h1 style={{
-          fontSize: '1.6rem',
-          marginBottom: '6rem',
-          animation: 'fade-in-up 1s ease-out',
-          zIndex: 1
-        }}>
-         <span className="text-gradient"> AI </span> career map generator 
+        <h1 className="text-2xl mb-24 animate-[fade-in-up_1s_ease-out] z-10 relative">
+          <span className="text-gradient"> AI </span> career map generator
         </h1>
 
-        <h1 style={{
-          fontSize: '3rem',
-          marginBottom: '3rem',
-          animation: 'fade-in-up 1s ease-out',
-          zIndex: 1
-        }}>
+        <h1 className="text-5xl mb-12 animate-[fade-in-up_1s_ease-out] z-10 relative">
           Ready to <span className="text-gradient">Change Your Life?</span>
         </h1>
 
-        <p style={{
-          fontSize: '1.5rem',
-          color: 'var(--text-secondary)',
-          maxWidth: '800px',
-          margin: '0 auto 3rem',
-          animation: 'fade-in-up 1s ease-out 0.3s backwards',
-          zIndex: 1
-        }}>
+        <p className="text-2xl text-slate-400 max-w-3xl mx-auto mb-12 animate-[fade-in-up_1s_ease-out_0.3s_backwards] z-10 relative">
           Get your AI-generated career roadmap right now. The future of career planning is here.
         </p>
 
-        <Link to="/assessment" style={{ animation: 'fade-in-up 1s ease-out 0.6s backwards', zIndex: 1 }}>
-          <button className="btn-primary" style={{ fontSize: '1.2rem', padding: '1.2rem 3rem' }}>
+        <Link to="/assessment" className="animate-[fade-in-up_1s_ease-out_0.6s_backwards] z-10 relative">
+          <button className="btn-primary !text-xl !px-12 !py-5">
             Get Started
           </button>
         </Link>
 
         {/* Floating AI Elements */}
-        <div style={{
-          position: 'absolute',
-          top: '20%',
-          left: '10%',
-          width: '100px',
-          height: '100px',
-          background: 'linear-gradient(45deg, var(--accent-cyan), transparent)',
-          borderRadius: '50%',
-          filter: 'blur(40px)',
-          animation: 'float 6s ease-in-out infinite',
-          opacity: 0.6,
-          zIndex: 0
-        }}></div>
+        <div className="absolute top-[20%] left-[10%] w-[100px] h-[100px] bg-gradient-to-tr from-accent-cyan to-transparent rounded-full blur-[40px] animate-float opacity-60 z-0"></div>
 
-        <div style={{
-          position: 'absolute',
-          bottom: '30%',
-          right: '10%',
-          width: '150px',
-          height: '150px',
-          background: 'linear-gradient(45deg, var(--accent-purple), transparent)',
-          borderRadius: '50%',
-          filter: 'blur(50px)',
-          animation: 'float 8s ease-in-out infinite reverse',
-          opacity: 0.5,
-          zIndex: 0
-        }}></div>
+        <div className="absolute bottom-[30%] right-[10%] w-[150px] h-[150px] bg-gradient-to-tr from-accent-purple to-transparent rounded-full blur-[50px] animate-[float_8s_ease-in-out_infinite_reverse] opacity-50 z-0"></div>
       </div>
 
       {/* About Section */}
-      <div style={{
-        padding: '5rem 2rem',
-        maxWidth: '1200px',
-        margin: '0 auto',
-        marginTop: '-9rem' /* Pulled up slightly as requested */
-      }}>
-        <h2 style={{ textAlign: 'center', marginBottom: '3rem', fontSize: '2.5rem' }}>
+      <div className="py-20 px-8 max-w-7xl mx-auto -mt-36 relative z-10">
+        <h2 className="text-center mb-12 text-4xl">
           How <span className="text-gradient">AI Career Map</span> Works
         </h2>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '2rem'
-        }}>
-          <div className="glass-panel" style={{ padding: '2rem', textAlign: 'center' }}>
-            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🎯</div>
-            <h3 style={{ color: 'var(--accent-cyan)', marginBottom: '1rem' }}>1. Take Assessment</h3>
-            <p>Tell our AI about your current skills, interests, and career goals in a simple interaction.</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="glass-panel p-8 text-center">
+            <div className="text-5xl mb-4">🎯</div>
+            <h3 className="text-accent-cyan text-xl mb-4">1. Take Assessment</h3>
+            <p className="text-slate-300">Tell our AI about your current skills, interests, and career goals in a simple interaction.</p>
           </div>
 
-          <div className="glass-panel" style={{ padding: '2rem', textAlign: 'center', animationDelay: '0.2s' }}>
-            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🧠</div>
-            <h3 style={{ color: 'var(--accent-purple)', marginBottom: '1rem' }}>2. AI Analysis</h3>
-            <p>Our advanced AI engine analyzes your profile against millions of career paths.</p>
+          <div className="glass-panel p-8 text-center animate-[fade-in-up_0.5s_ease-out_0.2s_backwards]">
+            <div className="text-5xl mb-4">🧠</div>
+            <h3 className="text-accent-purple text-xl mb-4">2. AI Analysis</h3>
+            <p className="text-slate-300">Our advanced AI engine analyzes your profile against millions of career paths.</p>
           </div>
 
-          <div className="glass-panel" style={{ padding: '2rem', textAlign: 'center', animationDelay: '0.4s' }}>
-            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🚀</div>
-            <h3 style={{ color: 'var(--accent-blue)', marginBottom: '1rem' }}>3. Get Your Roadmap</h3>
-            <p>Receive a personalized, step-by-step 12-month guide to reach your dream job.</p>
+          <div className="glass-panel p-8 text-center animate-[fade-in-up_0.5s_ease-out_0.4s_backwards]">
+            <div className="text-5xl mb-4">🚀</div>
+            <h3 className="text-accent-blue text-xl mb-4">3. Get Your Roadmap</h3>
+            <p className="text-slate-300">Receive a personalized, step-by-step 12-month guide to reach your dream job.</p>
           </div>
         </div>
       </div>

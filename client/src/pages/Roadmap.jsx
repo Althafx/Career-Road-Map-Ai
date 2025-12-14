@@ -169,10 +169,10 @@ function Roadmap() {
 
     if (assessments.length === 0) {
         return (
-            <div className="page-container" style={{ textAlign: 'center', paddingTop: '150px' }}>
-                <div className="glass-panel" style={{ maxWidth: '600px', margin: '0 auto', padding: '3rem' }}>
-                    <h1>Career Map Not Found</h1>
-                    <p style={{ margin: '1.5rem 0' }}>Initialize your first career assessment to generate a roadmap.</p>
+            <div className="page-container text-center pt-[150px]">
+                <div className="glass-panel max-w-2xl mx-auto p-12">
+                    <h1 className="text-4xl mb-6">Career Map Not Found</h1>
+                    <p className="mb-8 text-slate-300">Initialize your first career assessment to generate a roadmap.</p>
                     <button className="btn-primary" onClick={() => navigate('/assessment')}>Start Assessment</button>
                 </div>
             </div>
@@ -185,16 +185,17 @@ function Roadmap() {
     return (
         <div className="page-container">
             <div className="roadmap-container">
-                <h1 className="text-gradient" style={{ fontSize: '2.5rem', marginBottom: '2rem', textAlign: 'center' }}>
+                <h1 className="text-gradient text-5xl mb-8 text-center">
                     MISSION TRAJECTORY
                 </h1>
 
-                <div className="assessment-selector glass-panel">
-                    <label htmlFor="assessment-select" style={{ color: 'var(--accent-cyan)' }}>SELECT MISSION PROFILE:</label>
+                <div className="assessment-selector glass-panel p-8">
+                    <label htmlFor="assessment-select" className="text-accent-cyan block mb-4 font-bold tracking-wider">SELECT MISSION PROFILE:</label>
                     <select
                         id="assessment-select"
                         value={selectedAssessmentId}
                         onChange={handleAssessmentChange}
+                        className="w-full bg-slate-900/90 text-slate-100 border border-accent-blue py-4 px-8 rounded-xl text-lg cursor-pointer outline-none focus:shadow-[0_0_15px_rgba(77,121,255,0.4)]"
                     >
                         <option value="">-- Choose Career Assessment --</option>
                         {assessments.map((assessment) => (
@@ -205,74 +206,72 @@ function Roadmap() {
                     </select>
                 </div>
 
-                {error && <div className="error">{error}</div>}
+                {error && <div className="text-red-500 bg-red-500/10 p-4 rounded-lg mb-8 text-center border border-red-500">{error}</div>}
 
                 {loading ? (
-                    <div className="glass-panel" style={{ padding: '3rem', textAlign: 'center' }}>
-                        <h2 className="text-gradient">Analyzing Career Parameters...</h2>
+                    <div className="glass-panel p-12 text-center">
+                        <h2 className="text-gradient text-3xl mb-8">Analyzing Career Parameters...</h2>
                         <div className="spinner"></div>
                         <div className="progress-container">
                             <div className="progress-bar" style={{ width: `${progress}%` }}>
-                                {progress > 5 && `${progress}%`}
+                                {/* Note: Inline style for dynamic width is fine/necessary */}
+                                {progress > 5 && <span className="px-2 text-xs font-bold text-black">{progress}%</span>}
                             </div>
                         </div>
-                        <p>Constructing personalized roadmap matrix...</p>
+                        <p className="text-slate-300">Constructing personalized roadmap matrix...</p>
                     </div>
                 ) : !selectedAssessmentId ? (
-                    <div className="glass-panel" style={{ padding: '3rem', textAlign: 'center', opacity: 0.7 }}>
-                        <p>Select a career profile above to visualize your trajectory.</p>
+                    <div className="glass-panel p-12 text-center opacity-70">
+                        <p className="text-xl">Select a career profile above to visualize your trajectory.</p>
                     </div>
                 ) : !roadmap ? (
-                    <div className="glass-panel" style={{ padding: '3rem', textAlign: 'center' }}>
-                        <h2>Roadmap Not Generated</h2>
-                        <p style={{ margin: '1.5rem 0' }}>AI analysis ready for this profile.</p>
+                    <div className="glass-panel p-12 text-center">
+                        <h2 className="text-3xl mb-6">Roadmap Not Generated</h2>
+                        <p className="mb-8 text-slate-300">AI analysis ready for this profile.</p>
                         <button className="btn-primary" onClick={handleGenerate}>Initiate Generation Sequence</button>
                     </div>
                 ) : (
-                    <div style={{ animation: 'fade-in-up 0.5s ease-out' }}>
+                    <div className="animate-fade-in-up">
 
                         {/* Strategic Analysis Section */}
-                        <div style={{ marginBottom: '3rem' }}>
-                            <h2 style={{ marginBottom: '1.5rem', color: 'var(--text-primary)' }}>STRATEGIC ANALYSIS</h2>
+                        <div className="mb-12">
+                            <h2 className="text-2xl font-bold mb-6 text-slate-100">STRATEGIC ANALYSIS</h2>
 
                             {advice ? (
-                                <div style={{ display: 'grid', gap: '2rem' }}>
+                                <div className="grid gap-8">
                                     {/* Gap Analysis Card */}
-                                    <div className="glass-panel" style={{ padding: '2rem' }}>
-                                        <h3 style={{ color: 'var(--accent-cyan)', marginBottom: '1rem' }}>GAP ANALYSIS</h3>
-                                        <p>{advice.gapAnalysis}</p>
+                                    <div className="glass-panel p-8">
+                                        <h3 className="text-accent-cyan text-xl mb-4 font-bold">GAP ANALYSIS</h3>
+                                        <p className="text-slate-300 leading-relaxed">{advice.gapAnalysis}</p>
                                     </div>
 
                                     {/* Skills & Timeline Grid */}
-                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-                                        <div className="glass-panel" style={{ padding: '2rem' }}>
-                                            <h3 style={{ color: 'var(--accent-purple)', marginBottom: '1rem' }}>CRITICAL SKILLS ACQUISITION</h3>
-                                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        <div className="glass-panel p-8">
+                                            <h3 className="text-accent-purple text-xl mb-4 font-bold">CRITICAL SKILLS ACQUISITION</h3>
+                                            <div className="flex flex-wrap gap-2">
                                                 {advice.recommendedSkills?.map((skill, i) => (
-                                                    <span key={i} style={{
-                                                        background: 'rgba(0, 243, 255, 0.1)',
-                                                        border: '1px solid var(--accent-cyan)',
-                                                        padding: '0.3rem 0.8rem',
-                                                        borderRadius: '20px',
-                                                        fontSize: '0.9rem'
-                                                    }}>{skill}</span>
+                                                    <span key={i} className="bg-accent-cyan/10 border border-accent-cyan px-3 py-1 rounded-full text-sm text-slate-200">
+                                                        {skill}
+                                                    </span>
                                                 ))}
                                             </div>
                                         </div>
-                                        <div className="glass-panel" style={{ padding: '2rem' }}>
-                                            <h3 style={{ color: 'var(--accent-blue)', marginBottom: '1rem' }}>ESTIMATED TIMELINE</h3>
-                                            <p style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{advice.estimatedTimeline}</p>
-                                            <div style={{ marginTop: '1rem', padding: '1rem', background: 'rgba(255,255,255,0.05)', borderRadius: '10px' }}>
-                                                <strong>💡 Core Directive:</strong> {advice.motivationalTip}
+                                        <div className="glass-panel p-8">
+                                            <h3 className="text-accent-blue text-xl mb-4 font-bold">ESTIMATED TIMELINE</h3>
+                                            <p className="text-2xl font-bold text-white mb-4">{advice.estimatedTimeline}</p>
+                                            <div className="p-4 bg-white/5 rounded-xl border border-white/5">
+                                                <strong className="block text-accent-cyan mb-2">💡 Core Directive:</strong>
+                                                <span className="text-slate-300">{advice.motivationalTip}</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             ) : (
-                                <div className="glass-panel" style={{ padding: '2rem' }}>
+                                <div className="glass-panel p-8">
                                     {/* Fallback for legacy text data */}
                                     {roadmap.careerAdvice?.split('\n').map((line, index) => (
-                                        <p key={index}>{line}</p>
+                                        <p key={index} className="mb-2 text-slate-300">{line}</p>
                                     ))}
                                 </div>
                             )}
@@ -280,61 +279,54 @@ function Roadmap() {
 
                         {/* Execution Timeline Section */}
                         <div>
-                            <h2 style={{ marginBottom: '1.5rem', color: 'var(--text-primary)' }}>EXECUTION MATRIX</h2>
+                            <h2 className="text-2xl font-bold mb-6 text-slate-100">EXECUTION MATRIX</h2>
 
                             {roadmapData?.phases ? (
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                                <div className="flex flex-col gap-8">
                                     {roadmapData.phases.map((phase, idx) => (
-                                        <div key={idx} className="glass-panel" style={{
-                                            padding: '2rem',
-                                            position: 'relative',
-                                            overflow: 'hidden',
-                                            borderLeft: `4px solid ${idx % 2 === 0 ? 'var(--accent-cyan)' : 'var(--accent-purple)'}`
-                                        }}>
-                                            <div style={{
-                                                position: 'absolute', top: 0, right: 0,
-                                                padding: '0.5rem 1rem', background: 'rgba(255,255,255,0.1)',
-                                                borderBottomLeftRadius: '10px', fontWeight: 'bold'
-                                            }}>PHASE {idx + 1}</div>
+                                        <div key={idx} className={`glass-panel p-8 relative overflow-hidden border-l-4 ${idx % 2 === 0 ? 'border-l-accent-cyan' : 'border-l-accent-purple'}`}>
+                                            <div className="absolute top-0 right-0 px-4 py-2 bg-white/10 rounded-bl-xl font-bold text-sm tracking-wider">
+                                                PHASE {idx + 1}
+                                            </div>
 
-                                            <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: 'var(--text-primary)' }}>
+                                            <h3 className="text-2xl font-bold mb-6 text-white">
                                                 {phase.phaseTitle}
                                             </h3>
 
-                                            <div style={{ display: 'grid', gap: '1.5rem', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))' }}>
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                                 <div>
-                                                    <h4 style={{ color: 'var(--accent-cyan)', marginBottom: '0.5rem' }}>SKILLS PROTOCOL</h4>
-                                                    <ul style={{ listStyle: 'none' }}>
+                                                    <h4 className="text-accent-cyan font-bold mb-2 text-sm uppercase tracking-wider">SKILLS PROTOCOL</h4>
+                                                    <ul className="space-y-2">
                                                         {phase.skills.map((skill, sIdx) => (
-                                                            <li key={sIdx} style={{ marginBottom: '0.3rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                                                <span style={{ color: 'var(--accent-cyan)' }}>›</span> {skill}
+                                                            <li key={sIdx} className="flex items-center gap-2 text-slate-300">
+                                                                <span className="text-accent-cyan">›</span> {skill}
                                                             </li>
                                                         ))}
                                                     </ul>
                                                 </div>
                                                 <div>
-                                                    <h4 style={{ color: 'var(--accent-purple)', marginBottom: '0.5rem' }}>MISSION PROJECT</h4>
-                                                    <p>{phase.project}</p>
+                                                    <h4 className="text-accent-purple font-bold mb-2 text-sm uppercase tracking-wider">MISSION PROJECT</h4>
+                                                    <p className="text-slate-300">{phase.project}</p>
                                                 </div>
                                                 <div>
-                                                    <h4 style={{ color: 'var(--accent-blue)', marginBottom: '0.5rem' }}>TIME ALLOCATION</h4>
-                                                    <p style={{ background: 'rgba(0,0,0,0.3)', padding: '0.5rem', borderRadius: '5px' }}>{phase.timeBreakdown}</p>
+                                                    <h4 className="text-accent-blue font-bold mb-2 text-sm uppercase tracking-wider">TIME ALLOCATION</h4>
+                                                    <p className="bg-black/30 p-3 rounded-lg text-slate-300 text-sm border border-white/5">{phase.timeBreakdown}</p>
                                                 </div>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
                             ) : (
-                                <div className="glass-panel" style={{ padding: '2rem' }}>
+                                <div className="glass-panel p-8">
                                     {/* Fallback for legacy text data */}
                                     {roadmap.roadmapContent?.split('\n').map((line, index) => (
-                                        <p key={index}>{line}</p>
+                                        <p key={index} className="mb-2 text-slate-300">{line}</p>
                                     ))}
                                 </div>
                             )}
                         </div>
 
-                        <div style={{ textAlign: 'center', marginTop: '4rem' }}>
+                        <div className="text-center mt-16">
                             <button className="btn-primary" onClick={handleRegenerate}>Regenerate Trajectory</button>
                         </div>
                     </div>
