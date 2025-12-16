@@ -184,7 +184,18 @@ function Roadmap() {
 
     return (
         <div className="page-container">
-            <div className="roadmap-container">
+            <div className="roadmap-container relative">
+                {/* Mission Launch Button */}
+                {selectedAssessmentId && roadmap && (
+                    <div className="absolute top-0 right-0 md:fixed md:top-24 md:right-8 z-40">
+                        <button
+                            onClick={() => navigate(`/mission-control?assessmentId=${selectedAssessmentId}`)}
+                            className="bg-accent-cyan text-black font-bold py-3 px-6 rounded-full shadow-[0_0_20px_rgba(0,243,255,0.4)] hover:shadow-[0_0_30px_rgba(0,243,255,0.6)] hover:scale-105 transition-all flex items-center gap-2 animate-pulse-glow"
+                        >
+                            <span>🚀</span> LAUNCH MISSION
+                        </button>
+                    </div>
+                )}
                 <h1 className="text-gradient text-5xl mb-8 text-center">
                     MISSION TRAJECTORY
                 </h1>

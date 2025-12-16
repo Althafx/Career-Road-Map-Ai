@@ -99,6 +99,13 @@ function Dashboard() {
                       Delete
                     </button>
                   </div>
+
+                  {/* Completion Badge */}
+                  {assessment.roadmapCompleted && (
+                    <div className="absolute -top-0 -right-0 bg-gradient-to-r from-green-400 to-green-600 text-black font-bold px-4 py-1 rounded-md text-xs shadow-[0_0_15px_rgba(74,222,128,0.5)] border border-white/20 z-10 animate-pulse">
+                      ALL MISSIONS COMPLETE
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
