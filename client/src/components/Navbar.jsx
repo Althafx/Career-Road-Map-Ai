@@ -14,7 +14,6 @@ function Navbar() {
     <nav className="fixed top-0 w-full z-50 bg-slate-900/80 backdrop-blur-md border-b border-white/10 px-8 py-6 flex items-center justify-between">
       {/* Brand Logo */}
       <Link to="/" className="text-2xl font-bold text-accent-cyan flex items-center gap-2">
-        <span className="text-3xl">⚡</span>
         <span className="text-gradient">TRAJECTORY</span>
       </Link>
 
@@ -41,7 +40,7 @@ function Navbar() {
             </Link>
             <button
               onClick={handleLogout}
-              className="btn-logout"
+              className="!px-6 !py-2 !text-sm btn-danger"
             >
               Logout
             </button>

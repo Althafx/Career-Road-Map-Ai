@@ -200,7 +200,7 @@ function Roadmap() {
                         <option value="">-- Choose Career Assessment --</option>
                         {assessments.map((assessment) => (
                             <option key={assessment._id} value={assessment._id}>
-                                {assessment.targetRole} [ID: {assessment._id.slice(-4)}]
+                                {assessment.targetRole}
                             </option>
                         ))}
                     </select>
@@ -212,10 +212,10 @@ function Roadmap() {
                     <div className="glass-panel p-12 text-center">
                         <h2 className="text-gradient text-3xl mb-8">Analyzing Career Parameters...</h2>
                         <div className="spinner"></div>
+                        {progress > 5 && <span className="px-6 text-md font-bold text-white">{progress}%</span>}
                         <div className="progress-container">
                             <div className="progress-bar" style={{ width: `${progress}%` }}>
                                 {/* Note: Inline style for dynamic width is fine/necessary */}
-                                {progress > 5 && <span className="px-2 text-xs font-bold text-black">{progress}%</span>}
                             </div>
                         </div>
                         <p className="text-slate-300">Constructing personalized roadmap matrix...</p>

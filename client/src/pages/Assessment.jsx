@@ -51,11 +51,12 @@ function Assessment() {
         <div className="page-container flex justify-center items-center">
             <div className="glass-panel w-full max-w-4xl p-12 m-8">
                 <h1 className="text-gradient text-center mb-4 text-4xl">Initiate Career Analysis</h1>
+                <span className="text-accent-cyan text-center mb-4 text-2xl">Step {step} of 3</span>
 
                 {/* Progress Bar */}
                 <div className="progress-container mb-12">
                     <div className="progress-bar flex items-center justify-center text-xs font-bold text-black" style={{ width: `${progress}%` }}>
-                        Step {step} of 3
+
                     </div>
                 </div>
 
