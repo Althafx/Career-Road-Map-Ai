@@ -20,6 +20,21 @@ const roadmapSchema = new mongoose.Schema({
         enum: ['generating', 'completed', 'failed'],
         default: 'generating'
     },
+    progress: {
+        currentPhase: {
+            type: Number,
+            default: 0
+        },
+        completedTasks: [{
+            phaseIndex: Number,
+            taskIndex: Number,
+            completed: Boolean
+        }],
+        isCompleted: {
+            type: Boolean,
+            default: false
+        }
+    },
     createdAt: {
         type: Date,
         default: Date.now

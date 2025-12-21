@@ -114,6 +114,36 @@ exports.regenerateRoadmap = async (req, res) => {
     }
 };
 
+exports.updateRoadmapProgress = async (req, res) => {
+    try {
+        const { assessmentId, currentPhase, completedTasks, isCompleted } = req.body;
+
+        if (!assessmentId) {
+            return res.status(400).json({ message: 'Assessment ID required' });
+        }
+
+        const roadmap = await Roadmap.findOne({
+            user: req.user.id,
+            assessmentId: assessmentId
+        });
+
+        if (!roadmap) {
+            return res.status(404).json({ message: 'Roadmap not found' });
+        }
+
+        // Update progress fields
+        if (currentPhase !== undefined) roadmap.progress.currentPhase = currentPhase;
+        if (completedTasks !== undefined) roadmap.progress.completedTasks = completedTasks;
+        if (isCompleted !== undefined) roadmap.progress.isCompleted = isCompleted;
+
+        await roadmap.save();
+
+        res.json({ success: true, roadmap });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
 exports.getJobStatus = async (req, res) => {
     try {
         const { jobId } = req.params;

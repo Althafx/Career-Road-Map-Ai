@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../api/axios';
+import ResourcesPanel from '../components/ResourcesPanel';
 
 function Roadmap() {
     const [searchParams] = useSearchParams();
@@ -324,6 +325,12 @@ function Roadmap() {
                                                     <p className="bg-black/30 p-3 rounded-lg text-slate-300 text-sm border border-white/5">{phase.timeBreakdown}</p>
                                                 </div>
                                             </div>
+
+                                            {/* Learning Resources for this phase */}
+                                            <ResourcesPanel
+                                                skills={phase.skills}
+                                                phaseTitle={phase.phaseTitle}
+                                            />
                                         </div>
                                     ))}
                                 </div>
