@@ -39,12 +39,45 @@ exports.getAssessment = async (req, res) => {
     // Merge roadmap status into assessment objects
     const enrichedAssessments = assessments.map(assessment => {
       const roadmap = roadmaps.find(r => r.assessmentId === assessment._id.toString());
+
+      let progressPercentage = 0;
+      let totalTasks = 0;
+      let completedTasksCount = 0;
+
+      if (roadmap && roadmap.roadmapContent) {
+        try {
+          const parsedContent = JSON.parse(roadmap.roadmapContent);
+          // Calculate total tasks (sum of skills in all phases)
+          if (parsedContent.phases && Array.isArray(parsedContent.phases)) {
+            totalTasks = parsedContent.phases.reduce((acc, phase) => {
+              return acc + (phase.skills ? phase.skills.length : 0);
+            }, 0);
+          }
+
+          completedTasksCount = roadmap.progress ? roadmap.progress.completedTasks.length : 0;
+
+          if (totalTasks > 0) {
+            progressPercentage = Math.round((completedTasksCount / totalTasks) * 100);
+          }
+          // Cap at 100% just in case
+          if (progressPercentage > 100) progressPercentage = 100;
+
+          // If marked as completed in DB, ensure it shows 100%
+          if (roadmap.progress?.isCompleted) progressPercentage = 100;
+
+        } catch (e) {
+          console.error('Error parsing roadmap content for progress:', e);
+        }
+      }
+
       return {
         ...assessment.toObject(),
         hasRoadmap: !!roadmap,
         roadmapStatus: roadmap?.status,
         roadmapCompleted: roadmap?.progress?.isCompleted || false,
-        roadmapProgress: roadmap?.progress ? (roadmap.progress.completedTasks.length) : 0 // Basic metric
+        roadmapProgress: completedTasksCount,
+        totalTasks: totalTasks,
+        progressPercentage: progressPercentage
       };
     });
 

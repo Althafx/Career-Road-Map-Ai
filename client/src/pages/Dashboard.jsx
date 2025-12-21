@@ -82,6 +82,22 @@ function Dashboard() {
                     <div className="mb-6 space-y-2">
                       <p><strong className="text-slate-300">Current:</strong> {assessment.currentRole}</p>
                       <p><strong className="text-slate-300">Experience:</strong> {assessment.yearsOfExperience} years</p>
+
+                      {assessment.hasRoadmap && (
+                        <div className="mt-4 pt-4 border-t border-white/5">
+                          <div className="flex justify-between text-sm mb-1">
+                            <span className="text-slate-400">Mission Progress</span>
+                            <span className="text-accent-cyan font-bold">{assessment.progressPercentage || 0}%</span>
+                          </div>
+                          <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                            <div
+                              className="bg-gradient-to-r from-accent-cyan to-accent-purple h-full transition-all duration-1000"
+                              style={{ width: `${assessment.progressPercentage || 0}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      )}
+
                       <p className="text-sm text-slate-400 mt-2">
                         Created: {new Date(assessment.createdAt).toLocaleDateString()}
                       </p>
