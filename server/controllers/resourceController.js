@@ -1,70 +1,77 @@
 const Resource = require('../models/Resource');
 const youtubeApi = require('../utils/youtubeApi');
+const { searchSimilarResources } = require('../services/vectorStore');
 
 /**
- * Get learning resources for specific skills
- * Hybrid approach: Database + YouTube API
+ * Get learning resources for specific skills or semantic query
+ * Hybrid approach: Vector Search (Chroma) + Database Filter + YouTube API
  */
 exports.getResourcesForSkills = async (req, res) => {
     try {
-        const { skills } = req.query;
+        const { skills, q } = req.query;
 
-        // Edge case: No skills provided
-        if (!skills || skills.length === 0) {
-            return res.json({
-                success: true,
-                resources: [],
-                message: 'No skills specified'
-            });
+        console.log(`🔎 Resource Search | Skills: ${skills} | Query: ${q}`);
+
+        let dbResources = [];
+        let skillArray = [];
+
+        // 1. Vector Search (Semantic) -- If 'q' is provided
+        if (q) {
+            console.log(`🧠 Performing Semantic Search for: "${q}"`);
+            const vectorResults = await searchSimilarResources(q, 10);
+
+            // Vector results are just IDs and basic metadata
+            // We need to fetch the full documents from Mongo to match the UI shape
+            if (vectorResults && vectorResults.ids && vectorResults.ids.length > 0) {
+                // Chroma returns ids as [ ['id1', 'id2'] ] (list of lists)
+                const ids = vectorResults.ids[0];
+
+                dbResources = await Resource.find({
+                    _id: { $in: ids }
+                });
+
+                console.log(`   → Found ${dbResources.length} semantic matches`);
+            }
         }
 
-        // Parse skills (could be comma-separated string or array)
-        const skillArray = Array.isArray(skills)
-            ? skills
-            : skills.split(',').map(s => s.trim().toLowerCase());
+        // 2. Skill-based Search (Fallback or Filter) -- If 'skills' provided
+        if (skills && dbResources.length < 5) {
+            skillArray = Array.isArray(skills)
+                ? skills
+                : skills.split(',').map(s => s.trim().toLowerCase());
 
-        // Edge case: Empty array after parsing
-        if (skillArray.length === 0) {
-            return res.json({ success: true, resources: [] });
+            if (skillArray.length > 0) {
+                const keywordResources = await Resource.find({
+                    skills: { $in: skillArray },
+                    // Exclude ones we already found via vector search
+                    _id: { $nin: dbResources.map(r => r._id) }
+                })
+                    .limit(20)
+                    .sort({ rating: -1, createdAt: -1 });
+
+                console.log(`   → Found ${keywordResources.length} keyword matches`);
+                dbResources = [...dbResources, ...keywordResources];
+            }
         }
 
-        // Search database for matching resources
-        const dbResources = await Resource.find({
-            skills: { $in: skillArray }
-        })
-            .limit(20) // Limit for performance
-            .sort({ rating: -1, createdAt: -1 }); // Best rated, newest first
-
+        // 3. YouTube Supplementation (if low results)
         let allResources = [...dbResources];
 
-        // Always supplement with YouTube if we don't have enough database results
-        // This ensures we show resources for ANY skill topic (tech or non-tech)
-        console.log(`📊 Current DB resources: ${dbResources.length}, allResources: ${allResources.length}`);
-        console.log(`📊 Will search YouTube? ${allResources.length < 8 && skillArray.length > 0}`);
-
-        if (allResources.length < 8 && skillArray.length > 0) {
+        if (allResources.length < 5 && (q || skillArray.length > 0)) {
             try {
-                const youtubeResults = [];
+                const searchTerm = q || skillArray[0]; // Prefer query, fallback to first skill
+                console.log(`🎥 Supplementing with YouTube for: "${searchTerm}"`);
 
-                // Search YouTube for each skill (max 3 skills to avoid rate limits)
-                const skillsToSearch = skillArray.slice(0, 3);
+                // Get 2 playlists and 2 videos
+                const playlists = await youtubeApi.searchPlaylists(searchTerm, 2);
+                const videos = await youtubeApi.searchVideos(searchTerm, 2);
 
-                console.log(`🎥 Searching YouTube for: ${skillsToSearch.join(', ')}`);
+                const youtubeResults = [...playlists, ...videos];
+                console.log(`   → Found ${youtubeResults.length} YouTube results`);
 
-                for (const skill of skillsToSearch) {
-                    // Get 2 playlists and 1 video per skill
-                    const playlists = await youtubeApi.searchPlaylists(skill, 2);
-                    const videos = await youtubeApi.searchVideos(skill, 1);
-
-                    youtubeResults.push(...playlists, ...videos);
-                    console.log(`   → Found ${playlists.length + videos.length} YouTube results for "${skill}"`);
-                }
-
-                console.log(`🎥 Total YouTube results: ${youtubeResults.length}`);
                 allResources = [...allResources, ...youtubeResults];
             } catch (error) {
                 console.error('⚠️ YouTube supplementation failed:', error.message);
-                // Continue with DB results only
             }
         }
 
@@ -73,18 +80,11 @@ exports.getResourcesForSkills = async (req, res) => {
             index === self.findIndex(r => r.url === resource.url)
         );
 
-        console.log(`📚 Resource API called for skills: ${skillArray.join(', ')}`);
-        console.log(`   → DB results: ${dbResources.length}`);
-        console.log(`   → Total results: ${uniqueResources.length}`);
-
         res.json({
             success: true,
-            resources: uniqueResources.slice(0, 10), // Top 10
+            resources: uniqueResources.slice(0, 15),
             count: uniqueResources.length,
-            source: {
-                database: dbResources.length,
-                youtube: uniqueResources.length - dbResources.length
-            }
+            isSemantic: !!q
         });
 
     } catch (error) {

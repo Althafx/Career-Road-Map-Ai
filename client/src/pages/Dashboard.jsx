@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api/axios';
+import ConfirmationModal from '../components/ConfirmationModal';
 
 function Dashboard() {
   const [assessments, setAssessments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [assessmentToDelete, setAssessmentToDelete] = useState(null);
 
   useEffect(() => {
     fetchAssessments();
@@ -21,14 +24,12 @@ function Dashboard() {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Delete this assessment? This will also delete its roadmap.')) {
-      return;
-    }
+  const confirmDelete = async () => {
+    if (!assessmentToDelete) return;
 
     try {
-      await api.delete(`/assessment/${id}`);
-      setAssessments(assessments.filter(a => a._id !== id));
+      await api.delete(`/assessment/${assessmentToDelete}`);
+      setAssessments(assessments.filter(a => a._id !== assessmentToDelete));
     } catch (error) {
       alert('Failed to delete assessment');
     }
@@ -110,7 +111,10 @@ function Dashboard() {
                     </Link>
                     <button
                       className="btn-danger"
-                      onClick={() => handleDelete(assessment._id)}
+                      onClick={() => {
+                        setAssessmentToDelete(assessment._id);
+                        setIsDeleteModalOpen(true);
+                      }}
                     >
                       Delete
                     </button>
@@ -128,6 +132,15 @@ function Dashboard() {
           )}
         </div>
       </div>
+
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={confirmDelete}
+        title="Delete Assessment?"
+        message="This action will permanently remove this career trajectory and all linked mission progress. This cannot be undone."
+        type="danger"
+      />
     </div>
   );
 }

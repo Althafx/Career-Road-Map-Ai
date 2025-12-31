@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -8,11 +8,17 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Assessment from './pages/Assessment';
 import Roadmap from './pages/Roadmap';
 import MissionControl from './pages/MissionControl';
-function App() {
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminRoute from './components/AdminRoute';
+
+function AppContent() {
+  const location = useLocation();
+  const isAdminPath = location.pathname.startsWith('/admin');
 
   return (
-    <Router>
-      <Navbar />
+    <>
+      {!isAdminPath && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -44,9 +50,24 @@ function App() {
           }
         />
 
-      </Routes>
-    </Router>
+        {/* Admin Section */}
+        <Route path="/admin" element={<AdminLogin />} />
+        <Route path="/admin/dashboard" element={
+          <AdminRoute>
+            <AdminDashboard />
+          </AdminRoute>
+        } />
 
+      </Routes>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
   )
 }
 

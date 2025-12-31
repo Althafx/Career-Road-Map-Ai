@@ -3,6 +3,7 @@ const { connection } = require('../config/queue');
 const Roadmap = require('../models/Roadmap');
 const Resource = require('../models/Resource');
 const { generateCareerAdvice, generateRoadmap, generateResourcesForSkills } = require('../services/aiService');
+const { addResourceToVectorDB } = require('../services/vectorStore');
 
 const roadmapWorker = new Worker(
     'roadmap-generation',
@@ -82,7 +83,19 @@ const roadmapWorker = new Worker(
                         }));
 
                         await Resource.bulkWrite(ops);
-                        console.log(`✅ Saved ${newResources.length} new dynamic resources!`);
+                        console.log(`✅ Saved ${newResources.length} new dynamic resources to MongoDB!`);
+
+                        // 5. ALSO Sync to LanceDB for immediate searchability
+                        for (const resource of newResources) {
+                            try {
+                                // We need the ID from mongo if possible, but Resource.bulkWrite doesn't return them easily for updateOne
+                                // However, addResourceToVectorDB just needs a 'resource' object. 
+                                // Let's find them or just use the object (the script manually assigns IDs in vectorStore)
+                                await addResourceToVectorDB(resource);
+                            } catch (ve) {
+                                console.error(`Failed to sync ${resource.title} to vector DB:`, ve);
+                            }
+                        }
                     }
                 }
             } catch (resourceError) {

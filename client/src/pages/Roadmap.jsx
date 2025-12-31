@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../api/axios';
 import ResourcesPanel from '../components/ResourcesPanel';
+import ConfirmationModal from '../components/ConfirmationModal';
 
 function Roadmap() {
     const [searchParams] = useSearchParams();
@@ -11,6 +12,7 @@ function Roadmap() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [progress, setProgress] = useState(0);
+    const [isRegenerateModalOpen, setIsRegenerateModalOpen] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -126,11 +128,7 @@ function Roadmap() {
         }, 2000);
     };
 
-    const handleRegenerate = async () => {
-        if (!window.confirm('Regenerate roadmap? This will replace your current one.')) {
-            return;
-        }
-
+    const confirmRegenerate = async () => {
         setLoading(true);
         setError('');
         setProgress(0);
@@ -188,12 +186,16 @@ function Roadmap() {
             <div className="roadmap-container relative">
                 {/* Mission Launch Button */}
                 {selectedAssessmentId && roadmap && (
-                    <div className="absolute top-0 right-0 md:fixed md:top-24 md:right-8 z-40">
+                    <div className="absolute top-8 right-0 md:fixed md:top-36 md:right-8 z-40">
                         <button
                             onClick={() => navigate(`/mission-control?assessmentId=${selectedAssessmentId}`)}
-                            className="bg-accent-cyan text-black font-bold py-3 px-6 rounded-full shadow-[0_0_20px_rgba(0,243,255,0.4)] hover:shadow-[0_0_30px_rgba(0,243,255,0.6)] hover:scale-105 transition-all flex items-center gap-2 animate-pulse-glow"
+                            className="btn-launch"
                         >
-                            <span>🚀</span> LAUNCH MISSION
+                            <div className="btn-launch-glow"></div>
+                            <div className="btn-launch-inner">
+                                <span className="launch-line"></span>
+                                <span>LAUNCH MISSION</span>
+                            </div>
                         </button>
                     </div>
                 )}
@@ -345,11 +347,20 @@ function Roadmap() {
                         </div>
 
                         <div className="text-center mt-16">
-                            <button className="btn-primary" onClick={handleRegenerate}>Regenerate Trajectory</button>
+                            <button className="btn-primary" onClick={() => setIsRegenerateModalOpen(true)}>Regenerate Trajectory</button>
                         </div>
                     </div>
                 )}
             </div>
+
+            <ConfirmationModal
+                isOpen={isRegenerateModalOpen}
+                onClose={() => setIsRegenerateModalOpen(false)}
+                onConfirm={confirmRegenerate}
+                title="Regenerate Roadmap?"
+                message="This will re-analyze your career profile and construct a completely new mission trajectory. Your current roadmap will be overwritten."
+                type="info"
+            />
         </div>
     );
 }
