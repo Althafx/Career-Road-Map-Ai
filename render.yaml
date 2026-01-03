@@ -1,0 +1,47 @@
+services:
+  # API Service
+  - type: web
+    name: ai-career-map-api
+    env: node
+    plan: free # Can be upgraded for persistence
+    buildCommand: cd server && npm install
+    startCommand: cd server && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        fromConfig: MONGO_URI
+      - key: JWT_SECRET
+        generateValue: true
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: ai-career-map-redis
+          property: connectionString
+      - key: FRONTEND_URL
+        value: https://your-app-name.vercel.app # Update after Vercel deployment
+    disk:
+      name: lancedb-data
+      mountPath: /opt/render/project/src/server/data/lancedb
+      sizeGB: 1
+
+  # Background Worker (BullMQ)
+  - type: worker
+    name: ai-career-map-worker
+    env: node
+    buildCommand: cd server && npm install
+    startCommand: cd server && npm run worker
+    envVars:
+      - key: MONGO_URI
+        fromConfig: MONGO_URI
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: ai-career-map-redis
+          property: connectionString
+
+  # Redis for BullMQ
+  - type: redis
+    name: ai-career-map-redis
+    plan: free
+    ipAllowList: [] # Only allow internal connections

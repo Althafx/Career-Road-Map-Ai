@@ -1,12 +1,14 @@
 const { Queue } = require('bullmq');
 const Redis = require('ioredis');
 
-const connection = new Redis({
-    host: 'localhost',
-    port: 6379,
-    maxRetriesPerRequest: null
-})
+const connection = process.env.REDIS_URL
+    ? new Redis(process.env.REDIS_URL, { maxRetriesPerRequest: null })
+    : new Redis({
+        host: 'localhost',
+        port: 6379,
+        maxRetriesPerRequest: null
+    });
 
-const roadmapQueue = new Queue('roadmap-generation', {connection})
+const roadmapQueue = new Queue('roadmap-generation', { connection })
 
-module.exports ={roadmapQueue, connection}
+module.exports = { roadmapQueue, connection }
