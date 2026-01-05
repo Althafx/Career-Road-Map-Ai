@@ -1,9 +1,9 @@
 services:
-  # API Service
+  # Unified API & Worker Service (Free Tier)
   - type: web
-    name: ai-career-map-api
+    name: ai-career-map
     env: node
-    plan: free # Can be upgraded for persistence
+    plan: free
     buildCommand: cd server && npm install
     startCommand: cd server && npm start
     envVars:
@@ -14,34 +14,12 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: REDIS_URL
-        fromService:
-          type: redis
-          name: ai-career-map-redis
-          property: connectionString
+        placeholder: "Paste your Upstash Redis URL here"
       - key: FRONTEND_URL
         value: https://your-app-name.vercel.app # Update after Vercel deployment
-    disk:
-      name: lancedb-data
-      mountPath: /opt/render/project/src/server/data/lancedb
-      sizeGB: 1
-
-  # Background Worker (BullMQ)
-  - type: worker
-    name: ai-career-map-worker
-    env: node
-    buildCommand: cd server && npm install
-    startCommand: cd server && npm run worker
-    envVars:
-      - key: MONGO_URI
-        fromConfig: MONGO_URI
-      - key: REDIS_URL
-        fromService:
-          type: redis
-          name: ai-career-map-redis
-          property: connectionString
-
-  # Redis for BullMQ
-  - type: redis
-    name: ai-career-map-redis
-    plan: free
-    ipAllowList: [] # Only allow internal connections
+      - key: ADMIN_USERNAME
+        value: althaf
+      - key: ADMIN_PASSWORD
+        placeholder: "Set your admin password"
+      - key: GROQ_API_KEY
+        placeholder: "Paste your Groq API Key"

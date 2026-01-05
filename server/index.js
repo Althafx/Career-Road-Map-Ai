@@ -12,6 +12,15 @@ const resourceRoutes = require('./routes/resources')
 connectDB().then(() => {
     // Sync vector store on startup (non-blocking)
     syncEmbeddings().catch(err => console.error('Initial sync failed:', err));
+
+    // Start background worker in same process (Free Tier optimization)
+    try {
+        require('./workers/roadmapWorker');
+        console.log('🚀 Background Worker started in main process');
+    } catch (error) {
+        console.error('❌ WORKER FAILED TO START:', error.message);
+        console.error('Full error:', error);
+    }
 });
 const app = express();
 
