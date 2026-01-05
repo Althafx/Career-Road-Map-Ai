@@ -139,10 +139,6 @@ const ResourcesPanel = ({ skills, phaseTitle }) => {
 
             {/* Resources Carousel */}
             <div className="relative">
-                {/* Gradient Fade Edges */}
-                <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-primary to-transparent z-10 pointer-events-none hidden md:block"></div>
-                <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-primary to-transparent z-10 pointer-events-none hidden md:block"></div>
-
                 {/* Scrollable Container */}
                 <div className="overflow-x-auto pb-4 -mx-4 px-4 md:-mx-8 md:px-8 scrollbar-thin scrollbar-thumb-accent-cyan/20 scrollbar-track-slate-900/20">
                     <div className="flex gap-6">
